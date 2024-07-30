@@ -1,0 +1,71 @@
+### Register admin
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "ramil@yabbarov.ru",
+  "password": "password"
+}
+
+
+### Register user
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@yabbarov.ru",
+  "password": "password"
+}
+
+
+### Login
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "ramil@yabbarov.ru",
+  "password": "password"
+}
+
+
+### Logout
+POST http://localhost:8080/api/v1/auth/logout
+
+
+### Me
+POST http://localhost:8080/api/v1/auth/me
+
+
+################### PERSONS ###################
+
+
+### Get person with id == 1
+GET http://localhost:8080/api/v1/persons/1
+Content-Type: application/json
+
+
+### Get persons with page 0
+GET http://localhost:8080/api/v1/persons/1
+Content-Type: application/json
+
+
+################### ARTICLES ###################
+
+POST http://localhost:8080/api/v1/articles
+Content-Type: application/json
+
+{
+  "title": "Article title"
+}
+
+
+### Get article with id == 1
+GET http://localhost:8080/api/v1/articles/1
+Content-Type: application/json
+
+
+################### TAGS ###################
+
+### Get tag with id == 1
+GET http://localhost:8080/api/v1/tags/1
+Content-Type: application/json

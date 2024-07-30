@@ -1,0 +1,72 @@
+---
+# This docker-compose file is ignoring in production, but been using
+# in development with: $ docker compose up
+
+services:
+
+  redis:
+    container_name: redis-web
+    image: redis:7.2.5
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=password
+      - REDIS_PORT=6379
+    profiles:
+      - donotstart
+
+  postgresql:
+    container_name: postgres-web
+    image: postgres:16.3
+    restart: always
+    ports:
+      - "5432:5432"
+    build:
+      context: .
+      dockerfile: ./docker/postgresql/Dockerfile
+    environment:
+      - POSTGRES_DB=web
+      - POSTGRES_USER=web
+      - POSTGRES_PASSWORD=web
+
+  pgadmin:
+    container_name: pgadmin-web
+    image: dpage/pgadmin4:8.10
+    restart: always
+    ports:
+      - "8010:80"
+      #volumes:
+      #- pgadmin_data:/var/lib/pgadmin
+      #- ./docker/pgadmin/servers.json:/pgadmin4/servers.json
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:80/misc/ping || exit -1
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+    depends_on:
+      - postgresql
+
+  maildev:
+    container_name: mail-web
+    image: maildev/maildev
+    restart: always
+    ports:
+      - 8020:1080
+      - 1025:1025
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8010/misc/ping || exit -1
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+
+#volumes:
+#  pgadmin_data:
+
